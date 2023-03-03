@@ -29,7 +29,12 @@ function showErrorMessage(message = 'Something went wrong!') {
     });
 }
 
-function onModalSuccess(row) {
+function onModalBegin() {
+    $('body :submit').attr('disabled', 'disabled').attr('data-kt-indicator','on');
+}
+
+
+function onModalSuccess(row) { 
     showSuccessMessage();
     $('#Modal').modal('hide');
     if (updatedRow !== undefined) {
@@ -41,6 +46,10 @@ function onModalSuccess(row) {
 
     KTMenu.init();
     KTMenu.initHandlers();
+}
+
+function onModalComplete() {
+    $('body :submit').removeAttr('disabled').removeAttr('data-kt-indicator');
 }
 
     //DataTables
