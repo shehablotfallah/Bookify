@@ -11,7 +11,7 @@ function showSuccessMessage(message = 'Saved Successfully!') {
         buttonsStyling: false,
         confirmButtonText: "Ok",
         customClass: {
-            confirmButton: "btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary"
+            confirmButton: "btn btn-primary"
         }
     });
 }
@@ -24,7 +24,7 @@ function showErrorMessage(message = 'Something went wrong!') {
         buttonsStyling: false,
         confirmButtonText: "Ok",
         customClass: {
-            confirmButton: "btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary"
+            confirmButton: "btn btn-primary"
         }
     });
 }
@@ -66,7 +66,6 @@ var KTDatatables = function () {
         // Init datatable --- more info on datatables: https://datatables.net/manual/
         datatable = $(table).DataTable({
             "info": false,
-            'order': [],
             'pageLength': 10,
         });
     }
