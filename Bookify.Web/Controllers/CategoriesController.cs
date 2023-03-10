@@ -54,8 +54,8 @@
             }
             else
             {
-                var viewmodel = _mapper.Map<CategoryFormViewModel>(category);
-                return PartialView("_Form", viewmodel);
+                var viewModel = _mapper.Map<CategoryFormViewModel>(category);
+                return PartialView("_Form", viewModel);
             }
         }
 

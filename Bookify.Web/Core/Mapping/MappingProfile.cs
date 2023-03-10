@@ -4,8 +4,13 @@
     {
         public MappingProfile() 
         {
-            CreateMap<Category,CategoryViewModel> ();
-            CreateMap<CategoryFormViewModel,Category> ().ReverseMap();
+            //Authors
+            CreateMap<Author, AuthorViewModel>();
+            CreateMap<AuthorFormViewModel, Author>().ReverseMap();
+
+            //Categories
+            CreateMap<Category, CategoryViewModel>();
+            CreateMap<CategoryFormViewModel, Category>().ReverseMap();
         }
     }
 }
