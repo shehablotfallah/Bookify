@@ -20,14 +20,14 @@
         }
 
         [HttpGet, AjaxOnly]
-        public IActionResult Create() 
+        public IActionResult Create()
         {
 
             return PartialView("_Form");
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Create(AuthorViewModel model) 
+        public IActionResult Create(AuthorViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -45,7 +45,7 @@
             }
         }
 
-        [HttpGet,AjaxOnly]
+        [HttpGet, AjaxOnly]
         public IActionResult Edit(int id)
         {
             var author = _context.Authors.Find(id);
@@ -61,9 +61,9 @@
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Edit(AuthorViewModel model) 
+        public IActionResult Edit(AuthorViewModel model)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }

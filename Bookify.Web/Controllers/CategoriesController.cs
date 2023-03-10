@@ -20,7 +20,7 @@
         }
 
         [HttpGet, AjaxOnly]
-        public IActionResult Create() 
+        public IActionResult Create()
         {
             return PartialView("_Form");
         }
@@ -28,7 +28,7 @@
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Create(CategoryFormViewModel model)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -62,14 +62,14 @@
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Edit(CategoryFormViewModel model)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
             else
             {
                 var category = _context.Categories.Find(model.Id);
-                if (category is null) 
+                if (category is null)
                 {
                     return NotFound();
                 }
@@ -86,8 +86,8 @@
             }
         }
 
-        [HttpPost,ValidateAntiForgeryToken]
-        public IActionResult ToggleStatus(int id) 
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult ToggleStatus(int id)
         {
             var category = _context.Categories.Find(id);
             if (category is null)
