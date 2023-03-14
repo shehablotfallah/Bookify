@@ -1,4 +1,5 @@
 ﻿global using AutoMapper;
+global using Microsoft.AspNetCore.Mvc.Rendering;
 global using Bookify.Web.Core.Consts;
 global using Bookify.Web.Core.Models;
 global using Bookify.Web.Core.ViewModels;

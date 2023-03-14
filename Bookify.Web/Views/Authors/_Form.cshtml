@@ -16,7 +16,7 @@
             <input type="text" class="form-control" placeholder="Name" asp-for="Name"/>
             <label asp-for="Name"></label>
         </div>
-        <span class="text-danger" asp-validation-for="Name"></span>
+        <span asp-validation-for="Name" class="text-danger d-block" ></span>
     </div>
     <partial name="_ModalFooter" />
 </form>

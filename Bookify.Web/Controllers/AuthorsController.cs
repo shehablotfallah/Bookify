@@ -27,7 +27,7 @@
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Create(AuthorViewModel model)
+        public IActionResult Create(AuthorFormViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -55,13 +55,13 @@
             }
             else
             {
-                var viewModel = _mapper.Map<AuthorViewModel>(author);
+                var viewModel = _mapper.Map<AuthorFormViewModel>(author);
                 return PartialView("_Form", viewModel);
             }
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Edit(AuthorViewModel model)
+        public IActionResult Edit(AuthorFormViewModel model)
         {
             if (!ModelState.IsValid)
             {

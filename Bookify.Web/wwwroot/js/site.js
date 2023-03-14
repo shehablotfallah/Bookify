@@ -29,8 +29,12 @@ function showErrorMessage(message = 'Something went wrong!') {
     });
 }
 
+function disableSubmitButton() {
+    $('body :submit').attr('disabled', 'disabled').attr('data-kt-indicator', 'on');
+}
+
 function onModalBegin() {
-    $('body :submit').attr('disabled', 'disabled').attr('data-kt-indicator','on');
+    disableSubmitButton();
 }
 
 
@@ -147,6 +151,49 @@ var KTDatatables = function () {
 }();
 
 $(document).ready(function () {
+
+    //Disable Submit Button
+    $('form').on('submit', function () {
+        if ($('.js-tinymce').length > 0) {
+            $('.js-tinymce').each(function () {
+                var input = $(this)
+                var content = tinyMCE.get(input.attr('id')).getContent();
+                input.val.content();
+            })
+        }
+
+        var isValid = $(this).valid();
+        if (isValid) disableSubmitButton();
+        
+    })
+    //Tinymce
+    if ($('.js-tinymce').length > 0) {
+        var options = {
+            selector: ".js-tinymce",
+            height: "434",
+        };
+
+        if (KTThemeMode.getMode() === "dark") {
+            options["skin"] = "oxide-dark";
+            options["content_css"] = "dark";
+        }
+
+        tinymce.init(options);
+    }
+
+    //Datepicker
+    $('.js-datepicker').daterangepicker({
+        singleDatePicker: true,
+        autoApply: true,
+        drops: 'up',
+        maxDate: new Date(),
+    });
+
+    //Select2
+    $('.js-select2').select2();
+    $('.js-select2').on('select2:select', function (e) {
+        $('form').validate().element('#' + $(this).attr('id'));
+    });
     //SweetAlert
     var message = $('#Message').text();
     if (message !== '') {
