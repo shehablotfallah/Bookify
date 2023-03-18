@@ -87,6 +87,13 @@ var KTDatatables = function () {
                     }
                 },
                 {
+                    extend: 'print',
+                    title: documentTitle,
+                    exportOptions: {
+                        columns: exportedCols
+                    }
+                },
+                {
                     extend: 'excelHtml5',
                     title: documentTitle,
                     exportOptions: {

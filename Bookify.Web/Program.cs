@@ -1,5 +1,4 @@
 using Bookify.Web.Core.Mapping;
-using Bookify.Web.Settings;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
