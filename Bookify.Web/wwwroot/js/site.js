@@ -71,6 +71,9 @@ var KTDatatables = function () {
         datatable = $(table).DataTable({
             "info": false,
             'pageLength': 10,
+            'drawCallback': function () {
+                KTMenu.createInstances();
+            }
         });
     }
 
