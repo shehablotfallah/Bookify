@@ -1,34 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Bookify.Web.Helpers
+namespace Bookify.Web.Helpers;
+
+[HtmlTargetElement("a", Attributes = "active-when")]
+public class ActiveTag : TagHelper
 {
-    [HtmlTargetElement("a", Attributes = "active-when")]
-    public class ActiveTag : TagHelper
+    public string? ActiveWhen { get; set; }
+    [ViewContext, HtmlAttributeNotBound]
+    public ViewContext? ViewContextData { get; set; }
+
+    public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        public string? ActiveWhen { get; set; }
-        [ViewContext, HtmlAttributeNotBound]
-        public ViewContext? ViewContextData { get; set; }
-
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        if (string.IsNullOrEmpty(ActiveWhen))
         {
-            if (string.IsNullOrEmpty(ActiveWhen))
+            return;
+        }
+
+        var currentController = ViewContextData?.RouteData.Values["Controller"]?.ToString() ?? string.Empty;
+
+        if (currentController!.Equals(ActiveWhen))
+        {
+            if (output.Attributes.ContainsName("class"))
             {
-                return;
+                output.Attributes.SetAttribute("class", $"{output.Attributes["class"].Value} active");
             }
-
-            var currentController = ViewContextData?.RouteData.Values["Controller"]?.ToString();
-
-            if (currentController!.Equals(ActiveWhen))
+            else
             {
-                if (output.Attributes.ContainsName("class"))
-                {
-                    output.Attributes.SetAttribute("class", $"{output.Attributes["class"].Value} active");
-                }
-                else
-                {
-                    output.Attributes.SetAttribute("class", "active");
-                }
+                output.Attributes.SetAttribute("class", "active");
             }
         }
     }

@@ -1,110 +1,110 @@
-﻿using Bookify.Web.Core.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
+﻿namespace Bookify.Web.Controllers;
 
-namespace Bookify.Web.Controllers
+[Authorize(Roles = AppRoles.Archive)]
+public class BookCopiesController : Controller
 {
-    public class BookCopiesController : Controller
+    private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
+
+    public BookCopiesController(ApplicationDbContext context, IMapper mapper)
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
+        _context = context;
+        _mapper = mapper;
+    }
 
-        public BookCopiesController(ApplicationDbContext context, IMapper mapper)
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    [AjaxOnly]
+    public IActionResult Create(int bookId)
+    {
+        var book = _context.Books.Find(bookId);
+        if (book is null)
+            return NotFound();
+
+        var viewModel = new BookCopyFormViewModel 
+        { 
+            BookId = bookId,
+            ShowRentalInput = book.IsAvailableForRental
+        };
+        return PartialView("_Form",viewModel);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public IActionResult Create(BookCopyFormViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest();
+        var book = _context.Books.Find(model.BookId);
+
+        if (book is null)
+            return NotFound();
+
+        BookCopy copy = new()
         {
-            _context = context;
-            _mapper = mapper;
-        }
+            EditionNumber = model.EditionNumber,
+            IsAvailableForRental = book.IsAvailableForRental && model.IsAvailableForRental,
+            CreatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value
+    };
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        book.Copies.Add(copy);
+        _context.SaveChanges();
 
-        [AjaxOnly]
-        public IActionResult Create(int bookId)
-        {
-            var book = _context.Books.Find(bookId);
-            if (book is null)
-                return NotFound();
+        var viewModel = _mapper.Map<BookCopyViewModel>(copy);
 
-            var viewModel = new BookCopyFormViewModel 
-            { 
-                BookId = bookId,
-                ShowRentalInput = book.IsAvailableForRental
-            };
-            return PartialView("_Form",viewModel);
-        }
+        return PartialView("_BookCopyRow", viewModel);
+    }
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Create(BookCopyFormViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest();
-            var book = _context.Books.Find(model.BookId);
+    [AjaxOnly]
+    public IActionResult Edit(int id)
+    {
+        var copy = _context.BookCopies.Include(c => c.Book).SingleOrDefault(c => c.Id == id);
 
-            if (book is null)
-                return NotFound();
+        if (copy is null)
+            return NotFound();
 
-            BookCopy copy = new()
-            {
-                EditionNumber = model.EditionNumber,
-                IsAvailableForRental = book.IsAvailableForRental && model.IsAvailableForRental
-            };
+        var viewModel =_mapper.Map<BookCopyFormViewModel>(copy);
+        viewModel.ShowRentalInput = copy.Book!.IsAvailableForRental;
+        return PartialView("_Form", viewModel);
+    }
 
-            book.Copies.Add(copy);
-            _context.SaveChanges();
+    [HttpPost, ValidateAntiForgeryToken]
+    public IActionResult Edit(BookCopyFormViewModel model)
+    {
+        var copy = _context.BookCopies.Include(c => c.Book).SingleOrDefault(c => c.Id == model.Id);
 
-            var viewModel = _mapper.Map<BookCopyViewModel>(copy);
+        if (!ModelState.IsValid)
+            return BadRequest();
 
-            return PartialView("_BookCopyRow", viewModel);
-        }
+        if (copy is null)
+            return NotFound();
 
-        [AjaxOnly]
-        public IActionResult Edit(int id)
-        {
-            var copy = _context.BookCopies.Include(c => c.Book).SingleOrDefault(c => c.Id == id);
+        copy.EditionNumber = model.EditionNumber;
+        copy.IsAvailableForRental = copy.Book!.IsAvailableForRental && model.IsAvailableForRental;
+        copy.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        copy.LastUpdatedOn= DateTime.Now;
 
-            if (copy is null)
-                return NotFound();
+        _context.SaveChanges();
 
-            var viewModel =_mapper.Map<BookCopyFormViewModel>(copy);
-            viewModel.ShowRentalInput = copy.Book!.IsAvailableForRental;
-            return PartialView("_Form", viewModel);
-        }
+        var viewModel = _mapper.Map<BookCopyFormViewModel>(copy);
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Edit(BookCopyFormViewModel model)
-        {
-            var copy = _context.BookCopies.Include(c => c.Book).SingleOrDefault(c => c.Id == model.Id);
+        return PartialView("_Form", viewModel);
+    }
 
-            if (!ModelState.IsValid)
-                return BadRequest();
+    [HttpPost, ValidateAntiForgeryToken]
+    public IActionResult ToggleStatus(int id)
+    {
+        var copy = _context.BookCopies.Find(id);
+        if (copy is null)
+            return NotFound();
 
-            if (copy is null)
-                return NotFound();
-            copy.EditionNumber = model.EditionNumber;
-            copy.IsAvailableForRental = copy.Book!.IsAvailableForRental && model.IsAvailableForRental;
-            copy.LastUpdatedOn= DateTime.Now;
+        copy.IsDeleted = !copy.IsDeleted;
+        copy.LastUpdatedById = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        copy.LastUpdatedOn = DateTime.Now;
+        _context.SaveChanges();
 
-            _context.SaveChanges();
-
-            var viewModel = _mapper.Map<BookCopyFormViewModel>(copy);
-
-            return PartialView("_Form", viewModel);
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult ToggleStatus(int id)
-        {
-            var copy = _context.BookCopies.Find(id);
-            if (copy is null)
-                return NotFound();
-
-            copy.IsDeleted = !copy.IsDeleted;
-            copy.LastUpdatedOn = DateTime.Now;
-            _context.SaveChanges();
-
-            return Ok(copy.LastUpdatedOn.ToString());
-        }
+        return Ok(copy.LastUpdatedOn?.ToString("MMM dd, yyyy"));
     }
 }

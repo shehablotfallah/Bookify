@@ -13,8 +13,7 @@
             @(Model.IsDeleted ? "Deleted" : "Available")
         </span>
     </td>
-    <td>@Model.CreatedOn</td>
-    <td>@Model.LastUpdatedOn</td>
+    <td>@Model.CreatedOn.ToString("dd MMM, yyyy")</td>
     <td class="text-end">
         <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
             Actions

@@ -6,10 +6,8 @@ var exportedCols = [];
 function showSuccessMessage(message = 'Saved Successfully!') {
     Swal.fire({
         icon: 'success',
-        title: 'success',
+        title: 'Good JOB',
         text: message,
-        buttonsStyling: false,
-        confirmButtonText: "Ok",
         customClass: {
             confirmButton: "btn btn-primary"
         }
@@ -20,9 +18,7 @@ function showErrorMessage(message = 'Something went wrong!') {
     Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: message,
-        buttonsStyling: false,
-        confirmButtonText: "Ok",
+        text: message.responseText != undefined ? message.responseText : message,
         customClass: {
             confirmButton: "btn btn-primary"
         }
@@ -56,7 +52,15 @@ function onModalComplete() {
     $('body :submit').removeAttr('disabled').removeAttr('data-kt-indicator');
 }
 
-    //DataTables
+//Select2
+function applaySelect2() {
+    $('.js-select2').select2();
+    $('.js-select2').on('select2:select', function (e) {
+        $('form').not('#SignOut').validate().element('#' + $(this).attr('id'));
+    });
+}
+
+//DataTables
 var headers = $('th');
 $.each(headers, function (i) {
     if (!$(this).hasClass('js-no-export')) {
@@ -84,13 +88,6 @@ var KTDatatables = function () {
             buttons: [
                 {
                     extend: 'copyHtml5',
-                    title: documentTitle,
-                    exportOptions: {
-                        columns: exportedCols
-                    }
-                },
-                {
-                    extend: 'print',
                     title: documentTitle,
                     exportOptions: {
                         columns: exportedCols
@@ -163,7 +160,7 @@ var KTDatatables = function () {
 $(document).ready(function () {
 
     //Disable Submit Button
-    $('form').on('submit', function () {
+    $('form').not('#SignOut').on('submit', function () {
         if ($('.js-tinymce').length > 0) {
             $('.js-tinymce').each(function () {
                 var input = $(this)
@@ -200,10 +197,8 @@ $(document).ready(function () {
     });
 
     //Select2
-    $('.js-select2').select2();
-    $('.js-select2').on('select2:select', function (e) {
-        $('form').validate().element('#' + $(this).attr('id'));
-    });
+    applaySelect2();
+
     //SweetAlert
     var message = $('#Message').text();
     if (message !== '') {
@@ -228,6 +223,7 @@ $(document).ready(function () {
             success: function (form) {
                 modal.find('.modal-body').html(form);
                 $.validator.unobtrusive.parse(modal);
+                applaySelect2();
             },
             error: function () {
                 showErrorMessage();
@@ -274,5 +270,9 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+    // Handle Sign Out
+    $('.js-signout').on('click', function () {
+        $('#SignOut').submit();
     });
 });
