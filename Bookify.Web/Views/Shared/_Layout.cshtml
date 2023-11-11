@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<ApplicationUser> SignInManager
+<!DOCTYPE html>
 <html lang="en">
 <!--begin::Head-->
 <head>
@@ -31,7 +32,9 @@
 	<!--end:: page loader-->
 	<!--begin::Main-->
 	<!--begin::Root-->
-	<div class="d-flex flex-column flex-root">
+	@if (SignInManager.IsSignedIn(User))
+	{
+		<div class="d-flex flex-column flex-root">
 		<!--begin::Page-->
 		<div class="page d-flex flex-row flex-column-fluid">
 			<!--begin::Wrapper-->
@@ -53,7 +56,12 @@
 			<!--end::Wrapper-->
 		</div>
 		<!--end::Page-->
-	</div>
+		</div>
+	}
+	else
+	{
+		@RenderBody()
+	}
 	<!--end::Root-->
 
 	<!--end::Main-->

@@ -271,6 +271,42 @@ $(document).ready(function () {
             }
         });
     });
+
+    //Handle Confirm
+    $('body').delegate('.js-confirm', 'click', function () {
+        var btn = $(this);
+
+        bootbox.confirm({
+            message: btn.data('message'),
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-light-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    $.post({
+                        url: btn.data('url'),
+                        data: {
+                            '__RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function () {
+                            showSuccessMessage();
+                        },
+                        error: function () {
+                            showErrorMessage();
+                        }
+                    });
+                }
+            }
+        });
+    });
+
     // Handle Sign Out
     $('.js-signout').on('click', function () {
         $('#SignOut').submit();
