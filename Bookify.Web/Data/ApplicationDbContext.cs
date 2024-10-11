@@ -16,7 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<BookCategory> BookCategories { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Governorate> Governorates { get; set; }
-    public DbSet<Subscriper> Subscripers { get; set; }
+    public DbSet<Subscriber> Subscribers { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder builder)

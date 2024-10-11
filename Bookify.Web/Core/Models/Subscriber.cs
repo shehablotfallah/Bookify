@@ -6,7 +6,7 @@ namespace Bookify.Web.Core.Models;
 [Index(nameof(MobileNumber), IsUnique = true)]
 [Index(nameof(Email), IsUnique = true)]
 
-public class Subscriper : BaseModel
+public class Subscriber : BaseModel
 {
     public int Id { get; set; }
 

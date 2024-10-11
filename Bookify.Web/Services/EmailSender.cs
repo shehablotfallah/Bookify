@@ -26,7 +26,7 @@ public class EmailSender : IEmailSender
             IsBodyHtml = true
         };
 
-        message.To.Add(_webHostEnvironment.IsDevelopment() ? "Shehab-dev@outlook.com" : email);
+        message.To.Add(_webHostEnvironment.IsDevelopment() ? "shehabwael@std.mans.edu.eg" : email);
 
         SmtpClient smtpClient = new(_mailSettings.Host)
         {

@@ -183,7 +183,7 @@
 
             <!--end::Card body-->
             <div class="card-body">
-                <div class="js-alert @(Model.Copies.Any() ? "d-none" : string.Empty) alert alert-dismissible bg-light-warning border border-warning border-2 border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10">
+                <div class="js-alert @(Model.Copies.Any() ? "d-none" : string.Empty) alert bg-light-warning border border-warning border-2 border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10">
                     <!--begin::Icon-->
                     <!--begin::Svg Icon | path: icons/duotune/general/gen007.svg-->
                     <span class="svg-icon svg-icon-2hx svg-icon-warning me-4 mb-5 mb-sm-0">
@@ -200,7 +200,6 @@
                         <h5 class="mb-1">No Copies</h5>
                         <span>No copies available for this book yet.</span>
                     </div>
-                    <!--end::Content-->
                 </div>
                 <table class="@(Model.Copies.Any() ? string.Empty : "d-none") table table-row-dashed table-row-gray-300 gy-2 align-middle">
                     <thead>

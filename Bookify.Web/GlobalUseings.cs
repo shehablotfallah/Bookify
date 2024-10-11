@@ -1,4 +1,5 @@
 ﻿global using AutoMapper;
+global using CloudinaryDotNet;
 global using Bookify.Web.Core.Consts;
 global using Bookify.Web.Core.Models;
 global using Bookify.Web.Core.ViewModels;
@@ -9,13 +10,13 @@ global using Bookify.Web.Helpers;
 global using Bookify.Web.Services;
 global using Bookify.Web.Core.Mapping;
 global using Bookify.Web.Seeds;
-global using CloudinaryDotNet;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Rendering;
 global using Microsoft.EntityFrameworkCore;
-global using System.ComponentModel.DataAnnotations;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Identity;
-global using UoN.ExpressiveAnnotations.NetCore.Attributes;
+global using Microsoft.AspNetCore.DataProtection;
+global using System.ComponentModel.DataAnnotations;
 global using System.Security.Claims;
+global using UoN.ExpressiveAnnotations.NetCore.Attributes;
 

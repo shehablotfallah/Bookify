@@ -18,7 +18,7 @@ public class ImageService : IImageService
 
 	public async Task<(bool isUploaded, string? errorMessage)> UploadAsync(IFormFile image, string imageName, string folderPath, bool hasThumbnail)
 	{
-		var extension = Path.GetExtension(image.FileName);
+		var extension = Path.GetExtension(image.FileName).ToLower();
 
 		if (!_allowedExtensions.Contains(extension))
 			return (isUploaded: false, errorMessage: Errors.NotAllowedExtensions);
