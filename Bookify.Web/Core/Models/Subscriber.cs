@@ -47,4 +47,6 @@ public class Subscriber : BaseModel
     public string Address { get; set; } = null!;
 
     public bool IsBlackListed { get; set; }
+
+    public ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
 }

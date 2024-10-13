@@ -1,3 +1,6 @@
+using Bookify.Web.Tasks;
+using Hangfire;
+using Hangfire.Dashboard;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -43,8 +46,17 @@ builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
 builder.Services.AddWhatsAppApiClient(builder.Configuration);
 
-
 builder.Services.AddExpressiveAnnotations();
+
+builder.Services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
+builder.Services.AddHangfireServer();
+
+builder.Services.Configure<AuthorizationOptions>(options =>
+options.AddPolicy("AdminsOnly", policy =>
+{
+	policy.RequireAuthenticatedUser();
+	policy.RequireRole(AppRoles.Admin);
+}));
 
 var app = builder.Build();
 
@@ -77,6 +89,29 @@ var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Applicati
 
 await DefaultRoles.SeedAsync(roleManager);
 await DefaultUsers.SeedAdminUserAsync(userManager);
+
+//hangfire
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+	DashboardTitle = "Bookify Dashboard",
+	//IsReadOnlyFunc = (DashboardContext context) => true,
+	Authorization = new IDashboardAuthorizationFilter[]
+	{
+		new HangfireAuthorizationFilter("AdminsOnly")
+	}
+});
+
+var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+var webHostEnvironment = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+var whatsAppClient = scope.ServiceProvider.GetRequiredService<IWhatsAppClient>();
+var emailBodyBuilder = scope.ServiceProvider.GetRequiredService<IEmailBodyBuilder>();
+var emailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
+
+var hangfireTasks = new HangfireTasks(dbContext, webHostEnvironment, whatsAppClient,
+	emailBodyBuilder, emailSender);
+
+RecurringJob.AddOrUpdate("PrepareExpirationAlert",
+    () => hangfireTasks.PrepareExpirationAlert(), "0 14 * * *");
 
 app.MapControllerRoute(
     name: "default",
