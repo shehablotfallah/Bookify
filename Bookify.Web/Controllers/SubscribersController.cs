@@ -62,7 +62,9 @@ public class SubscribersController : Controller
             .Include(s => s.Governorate)
             .Include(s => s.Area)
             .Include(s => s.Subscriptions)
-            .SingleOrDefault(s => s.Id == subscriberId);
+			.Include(s => s.Rentals)
+			.ThenInclude(r => r.RentalCopies)
+			.SingleOrDefault(s => s.Id == subscriberId);
 
         if (subscriber is null)
             return NotFound();

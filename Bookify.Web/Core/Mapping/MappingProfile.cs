@@ -30,7 +30,9 @@ public class MappingProfile : Profile
 
         //BookCopy
         CreateMap<BookCopy, BookCopyViewModel>()
-            .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book!.Title));
+            .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book!.Title))
+            .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Book!.Id))
+            .ForMember(dest => dest.BookThumbnailUrl, opt => opt.MapFrom(src => src.Book!.ImageThumbnailUrl));
 
         CreateMap<BookCopy, BookCopyFormViewModel>();
 
@@ -74,5 +76,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Governorate, opt => opt.MapFrom(src => src.Governorate!.Name));
 
         CreateMap<Subscription, SubscriptionViewModel>();
-    }
+
+		//Rentals
+		CreateMap<Rental, RentalViewModel>();
+		CreateMap<RentalCopy, RentalCopyViewModel>();
+	}
 }

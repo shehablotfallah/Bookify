@@ -16,6 +16,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<BookCategory> BookCategories { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Governorate> Governorates { get; set; }
+    public DbSet<Rental> Rentals { get; set; }
+    public DbSet<RentalCopy> RentalCopies { get; set; }
     public DbSet<Subscriber> Subscribers { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
 
@@ -29,6 +31,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasDefaultValueSql("NEXT VALUE FOR shared.SerialNumber");
 
         builder.Entity<BookCategory>().HasKey(e => new { e.BookId, e.CategoryId });
+        builder.Entity<RentalCopy>().HasKey(e => new { e.RentalId, e.BookCopyId });
 
         var cascadeFKs = builder.Model.GetEntityTypes()
             .SelectMany( t => t.GetForeignKeys())

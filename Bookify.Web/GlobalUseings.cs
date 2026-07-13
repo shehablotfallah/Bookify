@@ -4,6 +4,7 @@ global using Hangfire;
 global using WhatsAppCloudApi;
 global using WhatsAppCloudApi.Services;
 global using Bookify.Web.Core.Consts;
+global using Bookify.Web.Core.Enums;
 global using Bookify.Web.Core.Models;
 global using Bookify.Web.Core.ViewModels;
 global using Bookify.Web.Data;
