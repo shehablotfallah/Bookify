@@ -287,7 +287,7 @@ public class SubscribersController : Controller
                     }
                 };
             //Change 2 with your country code
-            var mobileNumber = _webHostEnvironment.IsDevelopment() ? "2# #### ## ####" : $"2{subscriber.MobileNumber}";
+            var mobileNumber = _webHostEnvironment.IsDevelopment() ? "201091466926" : $"2{subscriber.MobileNumber}";
 
             
             BackgroundJob.Enqueue(() => _whatsAppClient

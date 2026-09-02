@@ -12,11 +12,19 @@ $(document).ready(function () {
         }
 
         if (selectedCopies.length >= maxAllowedCopies) {
-            showErrorMessage(`You cannot add more that ${maxAllowedCopies} books`);
+            showErrorMessage(`You cannot add more that ${maxAllowedCopies} book${maxAllowedCopies == 1 ? '' : 's'}`);
             return;
         }
 
         $('#SearchForm').submit();
+    });
+
+    $('body').delegate('.js-remove', 'click', function () {
+        $(this).parents('.js-copy-container').remove();
+        prepareInput();
+
+        if ($.isEmptyObject(selectedCopies))
+            $('#CopiesForm').find(':submit').addClass('d-none');
     });
 });
 
@@ -31,7 +39,12 @@ function onAddCopySuccess(copy) {
     }
 
     $('#CopiesForm').prepend(copy);
+    $('#CopiesForm').find(':submit').removeClass('d-none');
 
+    prepareInput();
+}
+
+function prepareInput() {
     var copies = $('.js-copy');
 
     selectedCopies = [];
